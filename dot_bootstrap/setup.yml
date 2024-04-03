@@ -6,10 +6,24 @@
   vars:
     Brew_packages: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_packages').split('\n') }}"
     Brew_cask_packages: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_cask_packages').split('\n') }}"
+    nerd_fonts_dir: "{{ lookup('file', '/tmp') }}"
+    nerd_fonts_version: "v3.1.1"
 
   tasks:
     - name: Run softwareupdate command
       command: softwareupdate --install-rosetta --agree-to-license
+      changed_when: false
+
+    - name: Download Nerd Fonts
+      get_url:
+        url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts_version }}/JetBrainsMono.zip"
+        dest: "{{ nerd_fonts_dir }}/nerd-fonts.zip"
+
+    - name: Unzip Nerd Fonts
+      command: "unzip -o '{{ nerd_fonts_dir }}/nerd-fonts.zip' -d '{{ nerd_fonts_dir }}'"
+
+    - name: Install Nerd Fonts
+      command: "cp -r '{{ nerd_fonts_dir }}'/*.ttf ~/Library/Fonts/"
       changed_when: false
 
     - name: Check if Homebrew is installed
