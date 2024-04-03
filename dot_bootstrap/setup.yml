@@ -6,7 +6,7 @@
   vars:
     Brew_packages: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_packages').split('\n') }}"
     Brew_cask_packages: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_cask_packages').split('\n') }}"
-    nerd_fonts_dir: "{{ lookup('file', '/tmp') }}"
+    nerd_fonts_dir: "{{ lookup('file', '~/fonts') }}"
     nerd_fonts_version: "v3.1.1"
 
   tasks:
@@ -27,30 +27,29 @@
       changed_when: false
 
     - name: Check if Homebrew is installed
-      command: "which brew"
+      stat:
+        path: /opt/homebrew/bin/brew
       register: brew_check
       changed_when: false
       failed_when: false
       ignore_errors: true
 
     - name: Install Homebrew if not installed
-      when: brew_check.rc != 0
+      when: brew_check.stat.exists
       become: yes
       shell: >
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      register: homebrew_installation
-      changed_when: homebrew_installation is changed
 
     - name: Install Homebrew packages
       community.general.homebrew:
         name: "{{ item }}"
         state: present
       loop: "{{ Brew_packages }}"
-      when: brew_check.rc == 0
+      when: brew_check.stat.exists
 
     - name: Install Homebrew casks
       community.general.homebrew_cask:
         name: "{{ item }}"
         state: present
       loop: "{{ Brew_cask_packages }}"
-      when: brew_check.rc == 0
+      when: brew_check.stat.exists

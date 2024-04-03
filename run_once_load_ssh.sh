@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+mkdir -p "$HOME/fonts"
+
 # Ensure the Bitwarden CLI is installed
 if ! command -v bw &> /dev/null; then
     printf '\033[0;31mBitwarden CLI is required but not found\033[0m\n' >&2
