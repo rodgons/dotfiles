@@ -1,0 +1,6 @@
+[user]
+	email = rodrigogoncalveess@gmail.com
+	user = rodrigogsilva
+	name = Rodrigo Gonçalves da Silva
+[core]
+    sshCommand = ssh -i ~/.ssh/gitlab -F /dev/null

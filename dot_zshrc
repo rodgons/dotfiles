@@ -1,0 +1,41 @@
+# Load all of the plugins that were defined in ~/.zshrc
+plugins=(
+    git
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    ssh-agent
+    nvm
+    macos
+    brew
+    thefuck
+    fzf
+    starship
+)
+
+# Load the theme
+source $ZSH/oh-my-zsh.sh
+
+# Enable agent forwarding for SSH connections
+zstyle :omz:plugins:ssh-agent agent-forwarding yes
+
+# Enable iterm2 shell integration
+zstyle :omz:plugins:iterm2 shell-integration yes
+
+# Load asdf from the system directory
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
+
+# pyenv
+eval "$(pyenv init -)"
+
+# fzf
+eval "$(fzf --zsh)"
+
+# starship
+eval "$(starship init zsh)"
+
+# Remove duplicate commands from history
+export HISTCONTROL=ignoredups
+
+# Increase the history size
+export HISTSIZE=10000
+export SAVEHIST=10000

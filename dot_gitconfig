@@ -1,0 +1,29 @@
+# Github
+[user]
+	email = rodrigogoncalveess@gmail.com
+	user = rodrigogsilva
+	name = Rodrigo Gonçalves da Silva
+[core]
+	editor = code --wait
+	autocrlf = input
+	sshCommand = ssh -i ~/.ssh/github -F /dev/null
+[push]
+	followTags = true
+[alias]
+	c = !git add --all && git commit -m
+	s = !git status -s
+	l = !git log --pretty=format:'%C(blue)%h%C(red)%d %C(white)%s - %C(cyan)%cn, %C(green)%cs'
+	age = !git log --pretty=format:'%ci' -1
+	amend = !git add --all && commit --amend --no-edit
+	count = !git shortlog -s --grep
+	up = !git commit --amend --no-edit --date=now
+[column]
+	ui = auto
+
+# Gitlab
+[includeIf "gitdir:~/Developer/gitlab/"]
+	path = ~/.gitlab.gitconfig
+
+# Nexum
+[includeIf "gitdir:~/Developer/nexum/"]
+	path = ~/.nexum.gitconfig

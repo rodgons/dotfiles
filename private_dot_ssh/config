@@ -1,0 +1,18 @@
+# Work SSH key
+Host dev.azure.com/nexumtecnologia
+    HostName dev.azure.com/nexumtecnologia
+    User git
+    IdentityFile ~/.ssh/nexum
+
+
+# Personal SSH key
+Host gitlab.com-rodrigogsilva
+    HostName gitlab.com
+    User git
+    IdentityFile ~/.ssh/gitlab
+
+# Personal SSH key
+Host github.com-rodrigogsilva
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/github
