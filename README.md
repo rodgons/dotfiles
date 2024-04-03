@@ -10,3 +10,11 @@ This automated setup is currently only configured for Fedora machines.
 export GITHUB_USERNAME=rodrigogsilva
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply $GITHUB_USERNAME
 ```
+
+### note
+
+For new installs, xcode commandline developer tools is needed
+
+```shell
+xcode-select --install
+```

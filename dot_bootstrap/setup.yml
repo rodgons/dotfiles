@@ -4,10 +4,14 @@
   gather_facts: yes
 
   vars:
-    Brew_packages:
-      - bat
+    Brew_packages: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_packages').split('\n') }}"
+    Brew_cask_packages: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_cask_packages').split('\n') }}"
 
   tasks:
+    - name: Run softwareupdate command
+      command: softwareupdate --install-rosetta --agree-to-license
+      changed_when: false
+
     - name: Check if Homebrew is installed
       command: "which brew"
       register: brew_check
@@ -28,4 +32,11 @@
         name: "{{ item }}"
         state: present
       loop: "{{ Brew_packages }}"
+      when: brew_check.rc == 0
+
+    - name: Install Homebrew casks
+      community.general.homebrew_cask:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ Brew_cask_packages }}"
       when: brew_check.rc == 0
