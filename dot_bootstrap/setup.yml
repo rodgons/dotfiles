@@ -1,0 +1,31 @@
+- name: Machine setup
+  hosts: localhost
+  become: false
+  gather_facts: yes
+
+  vars:
+    Brew_packages:
+      - bat
+
+  tasks:
+    - name: Check if Homebrew is installed
+      command: "which brew"
+      register: brew_check
+      changed_when: false
+      failed_when: false
+      ignore_errors: true
+
+    - name: Install Homebrew if not installed
+      when: brew_check.rc != 0
+      become: yes
+      shell: >
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      register: homebrew_installation
+      changed_when: homebrew_installation is changed
+
+    - name: Install Homebrew packages
+      community.general.homebrew:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ Brew_packages }}"
+      when: brew_check.rc == 0

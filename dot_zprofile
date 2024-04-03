@@ -41,16 +41,3 @@ function kill_port() {
     echo "Found process $pid, killing..."
     kill -s INT "$pid" || echo "Failed to kill process on port $1."
 }
-
-################################################################################
-
-# KEY BINDS
-
-# clear screen
-bindkey "^g" clear-screen
-
-# colorls
-alias ls='colorls'
-
-# nvim
-alias v=nvim

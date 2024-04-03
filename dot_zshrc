@@ -15,6 +15,15 @@ plugins=(
 # Load the theme
 source $ZSH/oh-my-zsh.sh
 
+# clear screen
+bindkey "^g" clear-screen
+
+# colorls
+alias ls='colorls'
+
+# nvim
+alias v=nvim
+
 # Enable agent forwarding for SSH connections
 zstyle :omz:plugins:ssh-agent agent-forwarding yes
 
