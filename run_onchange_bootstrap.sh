@@ -5,12 +5,21 @@ set -euo pipefail
 if ! command -v brew &> /dev/null; then
     printf '\033[0;32mInstalling Homebrew...\033[0m\n'
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> ~/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 if ! command -v brew &> /dev/null; then
     printf '\033[0;31mHomebrew is required but not found\033[0m\n' >&2
+    exit 1
+fi
+
+if ! command -v colorls &> /dev/null; then
+    printf '\033[0;32mInstalling colorls...\033[0m\n'
+    gem install colorls
+fi
+
+if ! command -v colorls &> /dev/null; then
+    printf '\033[0;31mcolorls is required but not found\033[0m\n' >&2
     exit 1
 fi
 

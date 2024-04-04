@@ -10,11 +10,6 @@
       command: softwareupdate --install-rosetta --agree-to-license
       changed_when: false
 
-    - name: Install colorls gem
-      gem:
-        name: colorls
-        state: present
-
     - name: Check if Nerd Fonts are installed
       stat:
         path: "{{ lookup('env', 'HOME') }}/Library/Fonts/JetBrainsMonoNLNerdFont-Bold.ttf"
@@ -28,9 +23,7 @@
       when: not nerd_fonts_installed.stat.exists
 
     - name: Create fonts directory
-      file:
-        path: "/tmp/fonts"
-        state: directory
+      command: mkdir -p /tmp/fonts
       when: not nerd_fonts_installed.stat.exists
 
     - name: Unzip Nerd Fonts
