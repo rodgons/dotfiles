@@ -58,8 +58,8 @@
 
     - name: Clone zsh-autosuggestions plugin if not installed
       git:
-        repo: "https://github.com/zsh-users/zsh-syntax-highlighting.git"
-        dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+        repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+        dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
       when: not plugin_check.stat.exists
 
     - name: Check if zsh-syntax-highlighting plugin directory exists

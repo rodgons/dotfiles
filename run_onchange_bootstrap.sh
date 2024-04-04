@@ -14,6 +14,37 @@ if ! command -v brew &> /dev/null; then
     exit 1
 fi
 
+printf '\033[0;32mInstalling asdf...\033[0m\n'
+brew install asdf
+
+# shellcheck disable=SC1090
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
+
+printf '\033[0;32mInstalling asdf plugins...\033[0m\n'
+asdf plugin add nodejs
+asdf plugin add golang
+asdf plugin add dotnet-core
+
+printf '\033[0;32mInstalling asdf versions...\033[0m\n'
+
+printf '\033[0;32minstalling latest nodejs...\033[0m\n'
+asdf install nodejs $(asdf nodejs resolve lts --latest-available)
+
+printf '\033[0;32minstalling latest golang...\033[0m\n'
+asdf install golang $(asdf list all golang | tail -n 1)
+
+printf '\033[0;32minstalling latest dotnet-core...\033[0m\n'
+asdf install dotnet-core $(asdf list all dotnet-core | grep "^8" | tail -n 1)
+
+printf '\033[0;32mSetting asdf global versions...\033[0m\n'
+asdf list all nodejs > /dev/null
+sleep 2
+asdf global nodejs $(asdf nodejs resolve lts --latest-available)
+sleep 2
+asdf global golang $(asdf list all golang | tail -n 1)
+sleep 2
+asdf global dotnet-core $(asdf list all dotnet-core | grep "^8" | tail -n 1)
+
 if ! command -v colorls &> /dev/null; then
     printf '\033[0;32mInstalling colorls...\033[0m\n'
     sudo gem install colorls
@@ -26,7 +57,7 @@ fi
 
 if ! command -v ansible-playbook &> /dev/null; then
     printf '\033[0;32mInstalling Ansible...\033[0m\n'
-    brew install ansible
+    brew install ansible bitwarden-cli
 fi
 
 if ! command -v ansible-playbook &> /dev/null; then
