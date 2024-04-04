@@ -17,9 +17,9 @@
 
     - name: Check if Nerd Fonts are installed
       stat:
-        path: "{{ lookup('env', 'HOME') }}/Library/Fonts/JetBrainsMono-Regular.ttf"
+        path: "{{ lookup('env', 'HOME') }}/Library/Fonts/JetBrainsMonoNLNerdFont-Bold.ttf"
       register: nerd_fonts_installed
-      ignore_errors: true
+      failed_when: false
 
     - name: Download Nerd Fonts
       get_url:
@@ -95,8 +95,20 @@
             msg: "Bitwarden CLI is required but not found. Please install it by running: brew install bitwarden-cli"
           when: bw_check.rc != 0
 
-    - name: Login to Bitwarden
-      command: "bw login"
+    - name: Starting Secrets sync
+      shell: |
+        printf '\033[0;32mStarting Secrets sync\033[0m\n'
+        if [ -z "${BW_SESSION-}" ]; then
+          export BW_SESSION=$(bw unlock --raw)
+        fi
+      args:
+        executable: /bin/bash
+
+    - name: Set BW_SESSION environment variable
+      ansible.builtin.set_fact:
+        ansible_env:
+          BW_SESSION: "{{ lookup('env', 'BW_SESSION') }}"
+      delegate_to: localhost
 
     - name: Sync Bitwarden Vault
       command: "bw sync"
