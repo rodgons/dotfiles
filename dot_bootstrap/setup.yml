@@ -81,3 +81,41 @@
         state: present
       loop: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_cask_packages').split('\n') }}"
       when: brew_check.stat.exists
+
+    - name: Ensure Bitwarden CLI is installed
+      block:
+        - name: Check if Bitwarden CLI is installed
+          command: "bw --version"
+          register: bw_check
+          changed_when: false
+          failed_when: false
+          ignore_errors: true
+        - name: Fail if Bitwarden CLI is not installed
+          fail:
+            msg: "Bitwarden CLI is required but not found. Please install it by running: brew install bitwarden-cli"
+          when: bw_check.rc != 0
+
+    - name: Login to Bitwarden
+      command: "bw login"
+
+    - name: Sync Bitwarden Vault
+      command: "bw sync"
+
+    - name: Get item attachedSecrets
+      command: "bw get item attachedSecrets"
+      register: attached_secrets
+      changed_when: false
+
+    - name: Create .ssh directory if it doesn't exist
+      file:
+        path: "{{ ansible_env.HOME }}/.ssh"
+        state: directory
+      when: not attached_secrets.rc
+
+    - name: Loop over attachments and download them
+      shell: |
+        for attachment in $(echo "{{ attached_secrets.stdout | from_json | json_query('attachments[*].id') }}"); do
+          attachment_name=$(bw get attachment $attachment --itemid {{ attached_secrets.stdout | from_json | json_query('id') }} --output - | jq -r '.fileName')
+          bw get attachment $attachment --itemid {{ attached_secrets.stdout | from_json | json_query('id') }} --output "{{ ansible_env.HOME }}/.ssh/$attachment_name"
+        done
+      when: not attached_secrets.rc
