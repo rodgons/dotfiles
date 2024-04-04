@@ -13,6 +13,8 @@ neovim
 nvm
 openssl
 pyenv
+starship
 tmux
 tree-sitter
 z
+zsh-history-substring-search

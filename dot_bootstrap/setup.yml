@@ -11,25 +11,34 @@
       changed_when: false
     
     - name: Install colorls gem
-      ansible.builtin.gem:
+      gem:
         name: colorls
         state: present
       become: yes
+
+    - name: Check if Nerd Fonts are installed
+      stat:
+        path: "{{ lookup('env', 'HOME') }}/Library/Fonts/JetBrainsMono-Regular.ttf"
+      register: nerd_fonts_installed
+      ignore_errors: true
 
     - name: Download Nerd Fonts
       get_url:
         url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts_version }}/JetBrainsMono.zip"
         dest: "/tmp/nerd-fonts.zip"
+      when: not nerd_fonts_installed.stat.exists
 
     - name: Create fonts directory
       file:
         path: "/tmp/fonts"
         state: directory
+        when: not nerd_fonts_installed.stat.exists
 
     - name: Unzip Nerd Fonts
       unarchive:
         src: "/tmp/nerd-fonts.zip"
         dest: "/tmp/fonts"
+        when: not nerd_fonts_installed.stat.exists
 
     - name: Install Nerd Fonts
       copy:
@@ -38,22 +47,17 @@
       loop: "{{ lookup('pipe', 'find /tmp/fonts -type f -name \"*.ttf\"').split('\n') }}"
       changed_when: true
       become: yes
+      when: not nerd_fonts_installed.stat.exists
 
-    - name: Download oh-my-zsh installation script
+    - name: Download Oh My Zsh installation script
       get_url:
         url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-        dest: "/tmp/install_oh_my_zsh.sh"
-        mode: 'u+rwx,go+rx'
-      register: oh_my_zsh_installation_script_result
-      changed_when: False
+        dest: /tmp/install_ohmyzsh.sh
 
-    - name: Install oh-my-zsh
-      shell: /bin/zsh /tmp/install_oh_my_zsh.sh --unattended
-      args:
-        chdir: /tmp
-      when: oh_my_zsh_installation_script_result.changed
-      retries: 5
-      delay: 1
+    - name: Run Oh My Zsh installation script
+      command: sh /tmp/install_ohmyzsh.sh --unattended
+      register: ohmyzsh_result
+      failed_when: "'FAILED' in ohmyzsh_result.stderr"
 
     - name: Check if Homebrew is installed
       stat:
