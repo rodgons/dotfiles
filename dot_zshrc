@@ -1,16 +1,17 @@
 # Load all of the plugins that were defined in ~/.zshrc
 plugins=(
+    brew
+    asdf
+    fzf
     git
+    macos
+    nvm
+    ssh-agent
+    starship
+    thefuck
+    zsh-autocomplete
     zsh-autosuggestions
     zsh-syntax-highlighting
-    zsh-autocomplete
-    ssh-agent
-    nvm
-    macos
-    brew
-    thefuck
-    fzf
-    starship
 )
 
 # Load the theme
