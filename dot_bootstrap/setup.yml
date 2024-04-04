@@ -101,14 +101,6 @@
         if [ -z "${BW_SESSION-}" ]; then
           export BW_SESSION=$(bw unlock --raw)
         fi
-      args:
-        executable: /bin/bash
-
-    - name: Set BW_SESSION environment variable
-      ansible.builtin.set_fact:
-        ansible_env:
-          BW_SESSION: "{{ lookup('env', 'BW_SESSION') }}"
-      delegate_to: localhost
 
     - name: Sync Bitwarden Vault
       command: "bw sync"
@@ -120,7 +112,7 @@
 
     - name: Create .ssh directory if it doesn't exist
       file:
-        path: "{{ ansible_env.HOME }}/.ssh"
+        path: "~/.ssh"
         state: directory
       when: not attached_secrets.rc
 
@@ -128,6 +120,6 @@
       shell: |
         for attachment in $(echo "{{ attached_secrets.stdout | from_json | json_query('attachments[*].id') }}"); do
           attachment_name=$(bw get attachment $attachment --itemid {{ attached_secrets.stdout | from_json | json_query('id') }} --output - | jq -r '.fileName')
-          bw get attachment $attachment --itemid {{ attached_secrets.stdout | from_json | json_query('id') }} --output "{{ ansible_env.HOME }}/.ssh/$attachment_name"
+          bw get attachment $attachment --itemid {{ attached_secrets.stdout | from_json | json_query('id') }} --output "~/.ssh/$attachment_name"
         done
       when: not attached_secrets.rc
