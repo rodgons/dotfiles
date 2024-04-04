@@ -14,7 +14,10 @@ nvm
 openssl
 pyenv
 starship
+thefuck
 tmux
 tree-sitter
 z
 zsh-history-substring-search
+zsh-autosuggestions
+zsh-syntax-highlighting
