@@ -15,7 +15,7 @@ fi
 
 if ! command -v colorls &> /dev/null; then
     printf '\033[0;32mInstalling colorls...\033[0m\n'
-    gem install colorls
+    sudo gem install colorls
 fi
 
 if ! command -v colorls &> /dev/null; then
