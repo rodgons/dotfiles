@@ -1,12 +1,9 @@
-- name: Machine setup
-  hosts: localhost
-  become: false
-  gather_facts: yes
+---
+- name: Configure host.
+  hosts: all
+  become: yes
 
   vars:
-    Brew_packages: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_packages').split('\n') }}"
-    Brew_cask_packages: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_cask_packages').split('\n') }}"
-    nerd_fonts_dir: "{{ lookup('file', '~/fonts') }}"
     nerd_fonts_version: "v3.1.1"
 
   tasks:
@@ -17,39 +14,64 @@
     - name: Download Nerd Fonts
       get_url:
         url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts_version }}/JetBrainsMono.zip"
-        dest: "{{ nerd_fonts_dir }}/nerd-fonts.zip"
+        dest: "/tmp/nerd-fonts.zip"
+
+    - name: Create fonts directory
+      file:
+        path: "/tmp/fonts"
+        state: directory
 
     - name: Unzip Nerd Fonts
-      command: "unzip -o '{{ nerd_fonts_dir }}/nerd-fonts.zip' -d '{{ nerd_fonts_dir }}'"
+      unarchive:
+        src: "/tmp/nerd-fonts.zip"
+        dest: "/tmp/fonts"
 
     - name: Install Nerd Fonts
-      command: "cp -r '{{ nerd_fonts_dir }}'/*.ttf ~/Library/Fonts/"
+      copy:
+        src: "/tmp/fonts/*.ttf"
+        dest: "~/Library/Fonts"
+      args:
+        creates: "{{ item }}"
+      loop: "{{ lookup('pipe', 'find ~/Library/Fonts -type f -name \"*.ttf\"') }}"
       changed_when: false
+
+    - name: Download oh-my-zsh installation script
+      get_url:
+        url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+        dest: "/tmp/install_oh_my_zsh.sh"
+        mode: 'u+rwx,go+rx'
+      changed_when: false
+      register: oh_my_zsh_installed
+
+    - name: Install oh-my-zsh
+      shell: /bin/zsh /tmp/install_oh_my_zsh.sh --unattended
+      args:
+        chdir: /tmp
+      when: oh_my_zsh_installed.stat.exists
+      retries: 5
+      delay: 1
 
     - name: Check if Homebrew is installed
       stat:
-        path: /opt/homebrew/bin/brew
+        path: "/opt/homebrew/bin/brew"
       register: brew_check
-      changed_when: false
       failed_when: false
       ignore_errors: true
 
     - name: Install Homebrew if not installed
-      when: brew_check.stat.exists
-      become: yes
-      shell: >
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      command: "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+      when: not brew_check.stat.exists
 
     - name: Install Homebrew packages
       community.general.homebrew:
         name: "{{ item }}"
         state: present
-      loop: "{{ Brew_packages }}"
+      loop: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_packages').split('\n') }}"
       when: brew_check.stat.exists
 
     - name: Install Homebrew casks
       community.general.homebrew_cask:
         name: "{{ item }}"
         state: present
-      loop: "{{ Brew_cask_packages }}"
+      loop: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_cask_packages').split('\n') }}"
       when: brew_check.stat.exists
