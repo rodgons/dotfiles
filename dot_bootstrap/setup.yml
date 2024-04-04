@@ -95,6 +95,11 @@
             msg: "Bitwarden CLI is required but not found. Please install it by running: brew install bitwarden-cli"
           when: bw_check.rc != 0
 
+    - name: Login to Bitwarden if not logged in
+      command: "bw login --check || bw login"
+      register: bw_login_result
+      failed_when: bw_login_result.rc != 0
+
     - name: Starting Secrets sync
       shell: |
         printf '\033[0;32mStarting Secrets sync\033[0m\n'
@@ -120,6 +125,9 @@
       shell: |
         for attachment in $(echo "{{ attached_secrets.stdout | from_json | json_query('attachments[*].id') }}"); do
           attachment_name=$(bw get attachment $attachment --itemid {{ attached_secrets.stdout | from_json | json_query('id') }} --output - | jq -r '.fileName')
-          bw get attachment $attachment --itemid {{ attached_secrets.stdout | from_json | json_query('id') }} --output "~/.ssh/$attachment_name"
+          bw get attachment $attachment --itemid {{ attached_secrets.stdout | from_json | json_query('id') }} --output "{{ ansible_env.HOME }}/.ssh/$attachment_name"
         done
+      args:
+        executable: /bin/bash
+        stdin_add_newline: yes
       when: not attached_secrets.rc
