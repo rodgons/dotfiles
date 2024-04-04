@@ -2,14 +2,14 @@
 
 set -euo pipefail
 
-mkdir -p "$HOME/fonts"
-
 # Ensure the Bitwarden CLI is installed
 if ! command -v bw &> /dev/null; then
     printf '\033[0;31mBitwarden CLI is required but not found\033[0m\n' >&2
     printf '\033[0;31mPlease install it by running: brew install bitwarden-cli\033[0m\n' >&2
     exit 1
 fi
+
+bw login
 
 # This script gets the Bitwarden item called "attachedSecrets" and downloads all
 # attachments to the ".ssh" directory in the user's home directory
