@@ -15,6 +15,7 @@
       ansible.builtin.gem:
         name: colorls
         state: present
+      become: yes
 
     - name: Download Nerd Fonts
       get_url:
@@ -34,9 +35,10 @@
     - name: Install Nerd Fonts
       copy:
         src: "{{ item }}"
-        dest: "~/Library/Fonts"
+        dest: "{{ lookup('env', 'HOME') }}/Library/Fonts/{{ item | basename }}"
       loop: "{{ lookup('pipe', 'find /tmp/fonts -type f -name \"*.ttf\"').split('\n') }}"
-      changed_when: false
+      changed_when: true
+      become: yes
 
     - name: Download oh-my-zsh installation script
       get_url:
@@ -72,6 +74,7 @@
         state: present
       loop: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_packages').split('\n') }}"
       when: brew_check.stat.exists
+      become: yes
 
     - name: Install Homebrew casks
       community.general.homebrew_cask:
@@ -79,3 +82,4 @@
         state: present
       loop: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_cask_packages').split('\n') }}"
       when: brew_check.stat.exists
+      become: yes
