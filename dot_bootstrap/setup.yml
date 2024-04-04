@@ -10,6 +10,11 @@
     - name: Run softwareupdate command
       command: softwareupdate --install-rosetta --agree-to-license
       changed_when: false
+    
+    - name: Install colorls gem
+      ansible.builtin.gem:
+        name: colorls
+        state: present
 
     - name: Download Nerd Fonts
       get_url:
@@ -28,11 +33,9 @@
 
     - name: Install Nerd Fonts
       copy:
-        src: "/tmp/fonts/*.ttf"
+        src: "{{ item }}"
         dest: "~/Library/Fonts"
-      args:
-        creates: "{{ item }}"
-      loop: "{{ lookup('pipe', 'find ~/Library/Fonts -type f -name \"*.ttf\"') }}"
+      loop: "{{ lookup('pipe', 'find /tmp/fonts -type f -name \"*.ttf\"').split('\n') }}"
       changed_when: false
 
     - name: Download oh-my-zsh installation script
@@ -40,14 +43,15 @@
         url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
         dest: "/tmp/install_oh_my_zsh.sh"
         mode: 'u+rwx,go+rx'
-      changed_when: false
-      register: oh_my_zsh_installed
+      register: oh_my_zsh_installation_script_result
+      changed_when: False
 
     - name: Install oh-my-zsh
       shell: /bin/zsh /tmp/install_oh_my_zsh.sh --unattended
       args:
         chdir: /tmp
-      when: oh_my_zsh_installed.stat.exists
+      become: yes
+      when: oh_my_zsh_installation_script_result.changed
       retries: 5
       delay: 1
 
