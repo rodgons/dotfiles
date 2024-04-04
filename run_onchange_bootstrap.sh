@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+printf '\033[0;32mSetting no password sudo...\033[0m\n'
+echo "$(whoami) ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers >/dev/null
+
 if ! command -v /opt/homebrew/bin/brew &> /dev/null; then
     printf '\033[0;32mInstalling Homebrew...\033[0m\n'
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -76,4 +79,5 @@ if ! ansible-playbook -i "$SRC_DIR/dot_bootstrap/inventory" "$SRC_DIR/dot_bootst
     exit 1
 fi
 
-
+printf '\033[0;32mReseting sudo...\033[0m\n'
+sudo sed -i.bak "/^$(whoami) /d" /etc/sudoers
