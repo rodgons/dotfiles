@@ -37,12 +37,11 @@ printf '\033[0;32minstalling latest dotnet-core...\033[0m\n'
 asdf install dotnet-core $(asdf list all dotnet-core | grep "^8" | tail -n 1)
 
 printf '\033[0;32mSetting asdf global versions...\033[0m\n'
-asdf list all nodejs > /dev/null
-sleep 2
+# there is a bug that for some reason the first time this command is ran
+# the lts version is not the full path
+asdf nodejs resolve lts --latest-available
 asdf global nodejs $(asdf nodejs resolve lts --latest-available)
-sleep 2
 asdf global golang $(asdf list all golang | tail -n 1)
-sleep 2
 asdf global dotnet-core $(asdf list all dotnet-core | grep "^8" | tail -n 1)
 
 if ! command -v colorls &> /dev/null; then
