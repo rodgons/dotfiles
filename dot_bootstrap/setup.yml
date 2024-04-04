@@ -9,7 +9,7 @@
     - name: Run softwareupdate command
       command: softwareupdate --install-rosetta --agree-to-license
       changed_when: false
-    
+
     - name: Install colorls gem
       gem:
         name: colorls
@@ -53,7 +53,8 @@
         dest: /tmp/install_ohmyzsh.sh
 
     - name: Run Oh My Zsh installation script
-      command: sh /tmp/install_ohmyzsh.sh --unattended
+      command:
+        cmd: sh /tmp/install_ohmyzsh.sh --unattended
       register: ohmyzsh_result
       failed_when: "'FAILED' in ohmyzsh_result.stderr"
 
@@ -65,53 +66,56 @@
       ignore_errors: true
 
     - name: Install Homebrew if not installed
-      command: "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+      command:
+        cmd: "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
       when: not brew_check.stat.exists
 
-    - name: Install Homebrew packages
-      community.general.homebrew:
-        name: "{{ item }}"
-        state: present
-      loop: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_packages').split('\n') }}"
-      when: brew_check.stat.exists
+    # - name: Install Homebrew packages
+    #   community.general.homebrew:
+    #     name: "{{ item }}"
+    #     state: present
+    #   loop: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_packages').split('\n') }}"
+    #   when: brew_check.stat.exists
 
-    - name: Install Homebrew casks
-      community.general.homebrew_cask:
-        name: "{{ item }}"
-        state: present
-      loop: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_cask_packages').split('\n') }}"
-      when: brew_check.stat.exists
+    # - name: Install Homebrew casks
+    #   community.general.homebrew_cask:
+    #     name: "{{ item }}"
+    #     state: present
+    #   loop: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_cask_packages').split('\n') }}"
+    #   when: brew_check.stat.exists
 
     - name: Ensure Bitwarden CLI is installed
-      command: brew install bitwarden-cli
-      args:
+      command:
+        cmd: brew install bitwarden-cli
         creates: bw
       ignore_errors: yes
-  
+
     - name: Login to Bitwarden
-      command: bw login
-  
+      command:
+        cmd: "bw login --check || bw login"
+
     - name: Sync secrets
       block:
         - name: Get Bitwarden item attachedSecrets
           shell: bw get item attachedSecrets
           register: item_output
-  
+
         - name: Set file ID
           set_fact:
             file_id: "{{ item_output.stdout | from_json | json_query('id') }}"
-  
+
         - name: Set attachments
           set_fact:
             attachments: "{{ item_output.stdout | from_json | json_query('.attachments[]') }}"
-  
+
         - name: Create .ssh directory if not exists
           file:
             path: "{{ ansible_env.HOME }}/.ssh"
             state: directory
-  
+
         - name: Download attachments
           debug:
             msg: "Downloading attachment {{ item.fileName }} (ID: {{ item.id }})"
           with_items: "{{ attachments }}"
-  
+
+
