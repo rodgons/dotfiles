@@ -41,3 +41,21 @@ function kill_port() {
     echo "Found process $pid, killing..."
     kill -s INT "$pid" || echo "Failed to kill process on port $1."
 }
+
+# show local or public ip
+function show_ip() {
+    local interface=global
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -l|--local)
+            interface=local
+            ;;
+        esac
+        shift
+    done
+    if [[ $interface == "local" ]]; then
+        ifconfig | grep -Eo 'inet (addr:)?([0-9]+\.){3}[0-9]+' | grep -v '127.0.0.1' | head -n1
+    else
+        curl -s ifconfig.co
+    fi
+}
