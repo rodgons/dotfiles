@@ -2,6 +2,17 @@
 
 set -euo pipefail
 
+if [ ! -f ~/passfile ]; then
+    read -r -p "Please provide your Bitwarden email: " email
+    read -r -s -p "Please provide your Bitwarden master password: " password
+    echo "$password" > ~/passfile
+    echo "$email" >> ~/passfile
+fi
+
+read -r -p "Please provide the nodejs version you want to install: " NODEJS_VERSION
+read -r -p "Please provide the golang version you want to install: " GOLANG_VERSION
+read -r -p "Please provide the dotnet-core version you want to install: " DOTNETCORE_VERSION
+
 printf '\033[0;32mSetting no password sudo...\033[0m\n'
 echo "$(whoami) ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers >/dev/null
 
@@ -30,22 +41,19 @@ asdf plugin add dotnet-core
 
 printf '\033[0;32mInstalling asdf versions...\033[0m\n'
 
-printf '\033[0;32minstalling latest nodejs...\033[0m\n'
-asdf install nodejs $(asdf nodejs resolve lts --latest-available)
+printf '\033[0;32minstalling nodejs %s...\033[0m\n' "$NODEJS_VERSION"
+asdf install nodejs "$NODEJS_VERSION"
 
-printf '\033[0;32minstalling latest golang...\033[0m\n'
-asdf install golang $(asdf list all golang | tail -n 1)
+printf '\033[0;32minstalling golang %s...\033[0m\n' "$GOLANG_VERSION"
+asdf install golang "$GOLANG_VERSION"
 
-printf '\033[0;32minstalling latest dotnet-core...\033[0m\n'
-asdf install dotnet-core $(asdf list all dotnet-core | grep "^8" | tail -n 1)
+printf '\033[0;32minstalling dotnet-core %s...\033[0m\n' "$DOTNETCORE_VERSION"
+asdf install dotnet-core "$DOTNETCORE_VERSION"
 
 printf '\033[0;32mSetting asdf global versions...\033[0m\n'
-# there is a bug that for some reason the first time this command is ran
-# the lts version is not the full path
-asdf nodejs resolve lts --latest-available
-asdf global nodejs $(asdf nodejs resolve lts --latest-available)
-asdf global golang $(asdf list all golang | tail -n 1)
-asdf global dotnet-core $(asdf list all dotnet-core | grep "^8" | tail -n 1)
+asdf global nodejs "$NODEJS_VERSION"
+asdf global golang "$GOLANG_VERSION"
+asdf global dotnet-core "$DOTNETCORE_VERSION"
 
 if ! command -v colorls &> /dev/null; then
     printf '\033[0;32mInstalling colorls...\033[0m\n'

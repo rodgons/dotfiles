@@ -9,12 +9,10 @@ if ! command -v /opt/homebrew/bin/bw &> /dev/null; then
     exit 1
 fi
 
-# This script gets the Bitwarden item called "attachedSecrets" and downloads all
-# attachments to the ".ssh" directory in the user's home directory
-printf '\033[0;32mStarting Secrets sync\033[0m\n'
-if [ -z "${BW_SESSION-}" ]; then
-    export BW_SESSION=$(/opt/homebrew/bin/bw unlock --raw)
-fi
+export BW_SESSION=$(\
+    /opt/homebrew/bin/bw login --passwordfile ~/passfile "$(cat ~/passfile | tail -n 1)" 2>/dev/null \
+    | grep BW_SESSION= | cut -d= -f2 \
+)
 
 /opt/homebrew/bin/bw sync
 
