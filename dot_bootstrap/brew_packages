@@ -5,6 +5,7 @@ btop
 chezmoi
 ffmpeg
 fzf
+golangci-lint
 gcc
 jq
 k6
