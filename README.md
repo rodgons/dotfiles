@@ -15,7 +15,7 @@ xcode-select --install
 then, run chezmoi
 
 ```shell
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply rodrigogsilva
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply rodgonsilva
 ```
 
 during the install the current user will have a no password sudo, so be carefull

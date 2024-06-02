@@ -1,5 +1,0 @@
-[user]
-    name = Rodrigo Gonçalves da Silva
-    email = rodrigo.silva@nexum.com.br
-[core]
-    sshCommand = ssh -i ~/.ssh/nexum -F /dev/null

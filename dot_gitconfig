@@ -1,7 +1,7 @@
-# Base
+# Github
 [user]
 	email = rodrigogoncalveess@gmail.com
-	user = rodrigogsilva
+	user = rodgonsilva
 	name = Rodrigo Gonçalves da Silva
 [core]
 	editor = code --wait
@@ -23,7 +23,3 @@
 # Gitlab
 [includeIf "gitdir:~/Developer/gitlab/"]
 	path = ~/.gitlab.gitconfig
-
-# Nexum
-[includeIf "gitdir:~/Developer/nexum/"]
-	path = ~/.nexum.gitconfig
