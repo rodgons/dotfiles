@@ -1,7 +1,7 @@
 # Github
 [user]
 	email = rodrigogoncalveess@gmail.com
-	user = rodgonsilva
+	user = rodgons
 	name = Rodrigo Gonçalves da Silva
 [core]
 	editor = code --wait
@@ -23,3 +23,7 @@
 # Gitlab
 [includeIf "gitdir:~/Developer/gitlab/"]
 	path = ~/.gitlab.gitconfig
+
+# Gitlab Godoy
+[includeIf "gitdir:~/Developer/freela/"]
+	path = ~/.git_godoy.gitconfig
