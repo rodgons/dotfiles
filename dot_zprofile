@@ -21,6 +21,9 @@ fi
 # oh-my-zsh
 export ZSH="$HOME/.oh-my-zsh"
 
+# brew sqlite
+export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
+
 ################################################################################
 
 # functions
@@ -47,7 +50,7 @@ function show_ip() {
     local interface=global
     while [[ $# -gt 0 ]]; do
         case $1 in
-            -l|--local)
+        -l | --local)
             interface=local
             ;;
         esac
@@ -58,4 +61,49 @@ function show_ip() {
     else
         curl -s ifconfig.co
     fi
+}
+
+# Function to convert a string to Pascal Case
+to_pascal_case() {
+    echo "$1" | awk -F' ' '{for(i=1;i<=NF;i++){ $i=toupper(substr($i,1,1)) tolower(substr($i,2)) }}1' OFS=''
+}
+
+# .net project generator
+function gen_dotnet() {
+    # Check if a name is provided
+    if [ -z "$1" ]; then
+        echo "Please provide a project name."
+        return 1
+    fi
+
+    # Project name
+    local project_name=$1
+    project_name=$(to_pascal_case "$1")
+
+    # Create a folder with the project name
+    mkdir $project_name
+    cd $project_name
+
+    # Create the src folder
+    mkdir src
+
+    # Create a solution file
+    dotnet new sln
+
+    # Create a class library project inside src called NAME.Core
+    dotnet new classlib -o src/$project_name.Core
+
+    # Create the API library
+    dotnet new web -o src/$project_name.Api
+    dotnet add src/$project_name.Api reference src/$project_name.Core
+
+    # Create global.json, .gitignore, and editorconfig files
+    dotnet new globaljson
+    dotnet new gitignore
+    dotnet new editorconfig
+
+    # Add all projects to the solution
+    dotnet sln add **/**.csproj
+
+    echo "Project $project_name created successfully."
 }
