@@ -9,6 +9,7 @@
 	sshCommand = ssh -i ~/.ssh/github -F /dev/null
 [push]
 	followTags = true
+	autoSetupRemote = true
 [alias]
 	c = !git add --all && git commit -m
 	s = !git status -s
@@ -24,6 +25,9 @@
 [includeIf "gitdir:~/Developer/gitlab/"]
 	path = ~/.gitlab.gitconfig
 
-# Gitlab Godoy
-[includeIf "gitdir:~/Developer/freela/"]
-	path = ~/.git_godoy.gitconfig
+[includeIf "gitdir:~/Developer/zopone/"]
+	path = ~/.zopone.gitconfig
+
+# Gitlab
+[includeIf "gitdir:~/Developer/wemov/"]
+	path = ~/.wemov.gitconfig
