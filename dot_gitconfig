@@ -24,10 +24,3 @@
 # Gitlab
 [includeIf "gitdir:~/Developer/gitlab/"]
 	path = ~/.gitlab.gitconfig
-
-[includeIf "gitdir:~/Developer/zopone/"]
-	path = ~/.zopone.gitconfig
-
-# Gitlab
-[includeIf "gitdir:~/Developer/wemov/"]
-	path = ~/.wemov.gitconfig
