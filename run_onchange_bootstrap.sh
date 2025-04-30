@@ -43,11 +43,6 @@ asdf install golang "$GOLANG_VERSION"
 printf '\033[0;32minstalling dotnet-core %s...\033[0m\n' "$DOTNETCORE_VERSION"
 asdf install dotnet-core "$DOTNETCORE_VERSION"
 
-printf '\033[0;32mSetting asdf global versions...\033[0m\n'
-asdf global nodejs "$NODEJS_VERSION"
-asdf global golang "$GOLANG_VERSION"
-asdf global dotnet-core "$DOTNETCORE_VERSION"
-
 if ! command -v colorls &> /dev/null; then
     printf '\033[0;32mInstalling colorls...\033[0m\n'
     sudo gem install colorls
