@@ -2,13 +2,6 @@
 
 set -euo pipefail
 
-if [ ! -f ~/passfile ]; then
-    read -r -p "Please provide your Bitwarden email: " email
-    read -r -s -p "Please provide your Bitwarden master password: " password
-    echo "$password" > ~/passfile
-    echo "$email" >> ~/passfile
-fi
-
 read -r -p "Please provide the nodejs version you want to install: " NODEJS_VERSION
 read -r -p "Please provide the golang version you want to install: " GOLANG_VERSION
 read -r -p "Please provide the dotnet-core version you want to install: " DOTNETCORE_VERSION

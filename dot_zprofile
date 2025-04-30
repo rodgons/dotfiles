@@ -107,3 +107,23 @@ function gen_dotnet() {
 
     echo "Project $project_name created successfully."
 }
+
+function mk() {
+  mkdir -p "$1" && cd "$1"
+}
+
+function man() {
+  GROFF_NO_SGR=1 \
+  LESS_TERMCAP_mb=$'\e[31m' \
+  LESS_TERMCAP_md=$'\e[34m' \
+  LESS_TERMCAP_me=$'\e[0m' \
+  LESS_TERMCAP_se=$'\e[0m' \
+  LESS_TERMCAP_so=$'\e[1;30m' \
+  LESS_TERMCAP_ue=$'\e[0m' \
+  LESS_TERMCAP_us=$'\e[35m' \
+  command man "$@"
+}
+
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init.zsh 2>/dev/null || :

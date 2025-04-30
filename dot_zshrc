@@ -33,7 +33,7 @@ zstyle :omz:plugins:ssh-agent agent-forwarding yes
 zstyle :omz:plugins:iterm2 shell-integration yes
 
 # Load asdf from the system directory
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
+#. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 # pyenv
 eval "$(pyenv init -)"
@@ -50,3 +50,34 @@ export HISTCONTROL=ignoredups
 # Increase the history size
 export HISTSIZE=10000
 export SAVEHIST=10000
+
+if command -v ngrok &>/dev/null; then
+    eval "$(ngrok completion)"
+fi
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/homebrew/Caskroom/miniforge/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/homebrew/Caskroom/miniforge/base/etc/profile.d/conda.sh" ]; then
+        . "/opt/homebrew/Caskroom/miniforge/base/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/homebrew/Caskroom/miniforge/base/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+export OLLAMA_HOST=0.0.0.0
+
+# Added by Windsurf
+export PATH="/Users/rodrigogsilva/.codeium/windsurf/bin:$PATH"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/rodrigogsilva/.cache/lm-studio/bin"
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+export SSH_AUTH_SOCK=/Users/rodrigogsilva/.bitwarden-ssh-agent.sock
