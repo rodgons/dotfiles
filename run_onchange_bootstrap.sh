@@ -43,6 +43,9 @@ asdf install golang "$GOLANG_VERSION"
 printf '\033[0;32minstalling dotnet-core %s...\033[0m\n' "$DOTNETCORE_VERSION"
 asdf install dotnet-core "$DOTNETCORE_VERSION"
 
+printf '\033[0;Update ruby...\033[0m\n'
+    brew install ruby
+
 if ! command -v colorls &> /dev/null; then
     printf '\033[0;32mInstalling colorls...\033[0m\n'
     sudo gem install colorls
