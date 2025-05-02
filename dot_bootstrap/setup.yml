@@ -109,3 +109,16 @@
         state: present
       loop: "{{ lookup('file', '~/.local/share/chezmoi/dot_bootstrap/brew_cask_packages').split('\n') }}"
       when: brew_check.stat.exists
+
+    - name: Install Ruby
+      community.general.homebrew:
+        name: ruby
+        state: present
+      when: brew_check.stat.exists
+
+    - name: Install colorls
+      command: gem install colorls
+      register: colorls_result
+      changed_when: "'Successfully installed' in colorls_result.stdout"
+      failed_when: colorls_result.rc != 0
+      when: brew_check.stat.exists
