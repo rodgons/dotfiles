@@ -4,6 +4,7 @@ bitwarden-cli
 btop
 chezmoi
 cmake
+fastfetch
 ffmpeg
 fzf
 gcc
@@ -11,9 +12,7 @@ git
 golangci-lint
 jq
 k6
-logi-options-plus
 neovim
-nerdfetch
 nvm
 openssl
 pyenv
