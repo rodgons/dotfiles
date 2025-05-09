@@ -113,16 +113,16 @@ format = '[[($all_status$ahead_behind )](fg:base bg:green)]($style)'
 
 [bun]
 style = "bg:teal"
-format = '[[ $symbol( $tfm) ](fg:base bg:teal)]($style)'
+format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
 
 [cmake]
 symbol = " "
 style = "bg:teal"
-format = '[[ $symbol( $tfm) ](fg:base bg:teal)]($style)'
+format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
 
 [dart]
 style = "bg:teal"
-format = '[[ $symbol( $tfm) ](fg:base bg:teal)]($style)'
+format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
 
 [deno]
 style = "bg:teal"
@@ -131,7 +131,7 @@ format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
 [dotnet]
 symbol = "󰪮 "
 style = "bg:teal"
-format = '[[ $symbol( $tfm) ](fg:base bg:teal)]($style)'
+format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
 
 [elixir]
 symbol = " "
