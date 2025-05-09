@@ -7,7 +7,7 @@
   compression = 9  # trade cpu for network
   fsync = none
   whitespace = error  # threat incorrect whitespace as errors
-  editor = code --wait
+  editor = "nvim -c 'set ft=gitcommit' -"
 
 [advice]  # disable advices
   addEmptyPathspec = false
@@ -84,8 +84,8 @@
 [url "git@github.com:"]
   insteadOf = "gh:"
 
-[url "ssh://git@git.qrator.net:2202/radar/"]
-  insteadOf = "radar:"
+[url "git@gitlab.com:"]
+  insteadOf = "gl:"
 
 [alias]
 	c = !git add --all && git commit -m
@@ -108,7 +108,7 @@
   #signingkey =
 
 # Gitlab
-[includeIf "gitdir:~/Developer/gitlab/"]
+[includeIf "gitdir:~/Developer/GITLAB/"]
 	[user]
 		email = rodrigogoncalveess@gmail.com
 		user = rodrigogsilva
