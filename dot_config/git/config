@@ -114,3 +114,9 @@
 		user = rodrigogsilva
 		name = Rodrigo Gonçalves da Silva
 
+# Gitlab Work
+[includeIf "gitdir:~/Developer/WORK/gitlab/"]
+	[user]
+		email = rodrigogoncalveess@gmail.com
+		user = rodrigogsilva
+		name = Rodrigo Gonçalves da Silva

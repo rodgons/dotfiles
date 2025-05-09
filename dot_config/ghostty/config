@@ -1,0 +1,15 @@
+keybind = super+r=reload_config
+keybind = super+up=new_split:up
+keybind = super+down=new_split:down
+keybind = super+left=new_split:left
+keybind = super+right=new_split:right
+keybind = super+shift+h=goto_split:left
+keybind = super+shift+l=goto_split:right
+keybind = super+j=goto_split:bottom
+keybind = super+k=goto_split:top
+keybind = super+shift+b=toggle_quick_terminal
+
+theme = "catppuccin-frappe"
+font-family = "FiraCode Nerd Font Mono"
+font-size = 18
+font-feature = liga

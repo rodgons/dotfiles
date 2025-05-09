@@ -34,6 +34,9 @@ asdf plugin add dotnet-core
 
 printf '\033[0;32mInstalling asdf versions...\033[0m\n'
 
+printf '\033[0;32minstalling nodejs %s...\033[0m\n' 14.15.5
+asdf install nodejs 14.15.5
+
 printf '\033[0;32minstalling nodejs %s...\033[0m\n' "$NODEJS_VERSION"
 asdf install nodejs "$NODEJS_VERSION"
 

@@ -30,9 +30,7 @@ $ruby\
 $rust\
 $swift\
 $zig\
-[](fg:teal bg:blue)\
-$docker_context\
-[](fg:blue bg:purple)\
+[](fg:teal bg:purple)\
 $time\
 [ ](fg:purple)\
 $line_break$character"""

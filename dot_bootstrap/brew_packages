@@ -13,7 +13,6 @@ golangci-lint
 jq
 k6
 neovim
-nvm
 openssl
 pyenv
 starship
