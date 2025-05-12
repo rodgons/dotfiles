@@ -34,8 +34,8 @@ asdf plugin add dotnet-core
 
 printf '\033[0;32mInstalling asdf versions...\033[0m\n'
 
-# printf '\033[0;32minstalling nodejs %s...\033[0m\n' 14.15.5
-# asdf install nodejs 14.15.5
+printf '\033[0;32minstalling nodejs %s...\033[0m\n' 14.15.5
+asdf install nodejs 14.15.5
 
 printf '\033[0;32minstalling nodejs %s...\033[0m\n' "$NODEJS_VERSION"
 asdf install nodejs "$NODEJS_VERSION"
@@ -48,7 +48,7 @@ asdf install dotnet-core "$DOTNETCORE_VERSION"
 
 if ! command -v ansible-playbook &> /dev/null; then
     printf '\033[0;32mInstalling Ansible...\033[0m\n'
-    brew install ansible bitwarden-cli
+    brew install ansible
 fi
 
 if ! command -v ansible-playbook &> /dev/null; then
