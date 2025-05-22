@@ -1,3 +1,2 @@
-require("klouny.core")
-require("klouny.lazy")
-
+-- bootstrap lazy.nvim, LazyVim and your plugins
+require("config.lazy")
